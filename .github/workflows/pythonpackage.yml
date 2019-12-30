@@ -1,8 +1,10 @@
 name: redis-dump
 
-on: [push]
+on: 
+- push:
   branches:
-      - master
+  - master
+
 jobs:
   build:
 
