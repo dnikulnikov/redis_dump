@@ -121,64 +121,65 @@ class RedisDump(Redis):
         return cnt
 
 
-DESCR = 'Скрипт для переноса базы redis'
-parser = argparse.ArgumentParser(description=DESCR)
-parser.add_argument(
-    '--from_host',
-    required=True,
-    help='Обязательный. redis from host.'
-)
-parser.add_argument(
-    '--from_port',
-    required=True,
-    help='Обязательный. redis form port'
-)
-parser.add_argument(
-    '--from_namespace',
-    required=True,
-    help='Обязательный. redis from namespace'
-)
-parser.add_argument(
-    '--to_host',
-    required=True,
-    help='Обязательный. redis to host. '
-)
-parser.add_argument(
-    '--to_port',
-    required=True,
-    help='Обязательный. redis to port'
-)
-parser.add_argument(
-    '--to_namespace',
-    required=True,
-    help='Обязательный. redis to namespace'
-)
-args, extra = parser.parse_known_args()
+def main():
+    DESCR = 'Скрипт для переноса базы redis'
+    parser = argparse.ArgumentParser(description=DESCR)
+    parser.add_argument(
+        '--from_host',
+        required=True,
+        help='Обязательный. redis from host.'
+    )
+    parser.add_argument(
+        '--from_port',
+        required=True,
+        help='Обязательный. redis form port'
+    )
+    parser.add_argument(
+        '--from_namespace',
+        required=True,
+        help='Обязательный. redis from namespace'
+    )
+    parser.add_argument(
+        '--to_host',
+        required=True,
+        help='Обязательный. redis to host. '
+    )
+    parser.add_argument(
+        '--to_port',
+        required=True,
+        help='Обязательный. redis to port'
+    )
+    parser.add_argument(
+        '--to_namespace',
+        required=True,
+        help='Обязательный. redis to namespace'
+    )
+    args, extra = parser.parse_known_args()
 
-r1 = {
-    'host': args.from_host,
-    'port': int(args.from_port),
-    'namespace': args.from_namespace,
-}
-r2 = {
-    'host': args.to_host,
-    'port': int(args.to_port),
-    'namespace': args.to_namespace,
-}
-try:
-    filename = './dump_file.txt'
-    ro1 = RedisDump(host=r1['host'], port=r1['port'])
-    with open(filename, 'w+') as outfile:
-        ro1.dump(
-            outfile,
-            '{}.*'.format(r1['namespace']),
-            r1['namespace'],
-            r2['namespace'])
+    r1 = {
+        'host': args.from_host,
+        'port': int(args.from_port),
+        'namespace': args.from_namespace,
+    }
+    r2 = {
+        'host': args.to_host,
+        'port': int(args.to_port),
+        'namespace': args.to_namespace,
+    }
+    try:
+        filename = './dump_file.txt'
+        ro1 = RedisDump(host=r1['host'], port=r1['port'])
+        with open(filename, 'w+') as outfile:
+            ro1.dump(
+                outfile,
+                '{}.*'.format(r1['namespace']),
+                r1['namespace'],
+                r2['namespace'])
 
-    ro2 = RedisDump(host=r2['host'], port=r2['port'])
-    with open(filename, 'r+') as infile:
-        cnt = ro2.restore(infile)
-except Exception as e:
-    print('ERROR:', e)
+        ro2 = RedisDump(host=r2['host'], port=r2['port'])
+        with open(filename, 'r+') as infile:
+            cnt = ro2.restore(infile)
+    except Exception as e:
+        print('ERROR:', e)
 
-print('Success', cnt)
+    print('Success', cnt)

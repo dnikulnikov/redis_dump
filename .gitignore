@@ -1,3 +1,4 @@
 .env/*
 dump_file.txt
 tmp/*
+*.egg-info
