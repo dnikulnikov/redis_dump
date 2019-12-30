@@ -5,3 +5,4 @@ tmp/*
 .tox/*
 .coverage
 .reports/*
+*/__pycache__/*
