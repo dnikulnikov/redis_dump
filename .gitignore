@@ -2,3 +2,6 @@
 dump_file.txt
 tmp/*
 *.egg-info
+.tox/*
+.coverage
+.reports/*
